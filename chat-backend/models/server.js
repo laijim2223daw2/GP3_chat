@@ -6,7 +6,7 @@ const path     = require('path');
 const cors     = require('cors');
 
 const Sockets  = require('./sockets');
-const { dbConnection } = require('../database/config')
+const { dbConnection } = require('../database/config');
 
 class Server {
 
@@ -15,7 +15,7 @@ class Server {
         this.app  = express();
         this.port = process.env.PORT;
 
-        //Conectar a DB
+        // Conectar a DB
         dbConnection();
 
         // Http server
@@ -25,20 +25,20 @@ class Server {
         this.io = socketio( this.server, { /* configuraciones */ } );
     }
 
-    //Toma el Body y lo parsea
     middlewares() {
         // Desplegar el directorio público
         this.app.use( express.static( path.resolve( __dirname, '../public' ) ) );
 
-        //CORS (permitir cualquier petición de cualquier lugar). Colocarlo en todos los middlewares
+        // CORS
         this.app.use( cors() );
 
-        //Parseo del body
+        
+        // Parseo del body
         this.app.use( express.json() );
 
-        //API ENDPoints
-        this.app.use( '/api/login', require('../router/auth'));
-        this.app.use( '/api/mensajes', require('../router/mensajes'));
+        // API End Points
+        this.app.use( '/api/login', require('../router/auth') );
+        this.app.use( '/api/mensajes', require('../router/mensajes') );
     }
 
     // Esta configuración se puede tener aquí o como propieda de clase

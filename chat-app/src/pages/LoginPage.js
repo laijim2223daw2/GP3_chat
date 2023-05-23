@@ -65,12 +65,13 @@ export const LoginPage = () => {
 
 
     return (
+        <div className="login-container">
         <form 
             className="login100-form validate-form flex-sb flex-w"
             onSubmit={ onSubmit }
         >
             <span className="login100-form-title mb-3">
-                Chat - Ingreso
+                Login
             </span>
             
             <div className="wrap-input100 validate-input mb-3">
@@ -98,9 +99,9 @@ export const LoginPage = () => {
                 <span className="focus-input100"></span>
             </div>
             
-            <div className="row mb-3">
+            <div className="row mb-3 my-row check-container">
                 <div 
-                    className="col"
+                    className="col my-col"
                     onClick={ ()=> toggleCheck() }
                 >
                     <input
@@ -116,7 +117,7 @@ export const LoginPage = () => {
                     </label>
                 </div>
 
-                <div className="col text-right">
+                <div className="col text-right my-col link-container">
                     <Link to="/auth/register" className="txt1">
                         Nueva cuenta?
                     </Link>
@@ -134,5 +135,6 @@ export const LoginPage = () => {
             </div>
 
         </form>
+        </div>
     )
 }

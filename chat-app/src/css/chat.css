@@ -4,7 +4,7 @@ html, body {
 }
 
 img {
-    max-width: 100%;
+    max-width: 87%;
 }
 
 .inbox_people {
@@ -46,7 +46,7 @@ img {
 }
 
 .recent_heading h4 {
-    color: #7674FE;
+    color: #5ba92f;
     font-size: 18px;
     margin: auto;
 }
@@ -161,7 +161,7 @@ img {
 }
 
 .sent_msg p {
-    background: #7674FE none repeat scroll 0 0;
+    background: #74bbfe none repeat scroll 0 0;
     border-radius: 3px;
     font-size: 14px;
     margin: 0;
@@ -195,7 +195,7 @@ img {
 }
 
 .msg_send_btn {
-    background: #7674FE none repeat scroll 0 0;
+    background:#74bbfe none repeat scroll 0 0;
     border: medium none;
     border-radius: 5px;
     color: #fff;

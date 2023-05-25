@@ -8,8 +8,14 @@ const cors     = require('cors');
 const Sockets  = require('./sockets');
 const { dbConnection } = require('../database/config');
 
+/**
+ * Clase del servidor
+ */
 class Server {
 
+    /**
+     * Constructor de la clase Server
+     */
     constructor() {
 
         this.app  = express();
@@ -25,6 +31,9 @@ class Server {
         this.io = socketio( this.server, { /* configuraciones */ } );
     }
 
+    /**
+     * Configura los middlewares del servidor
+     */
     middlewares() {
         // Desplegar el directorio público
         this.app.use( express.static( path.resolve( __dirname, '../public' ) ) );
@@ -41,12 +50,16 @@ class Server {
         this.app.use( '/api/mensajes', require('../router/mensajes') );
     }
 
-    // Esta configuración se puede tener aquí o como propieda de clase
-    // depende mucho de lo que necesites
+    /**
+     * Configura los sockets del servidor
+     */
     configurarSockets() {
         new Sockets( this.io );
     }
 
+    /**
+     * Ejecuta el servidor
+     */
     execute() {
 
         // Inicializar Middlewares

@@ -1,6 +1,12 @@
 const Mensaje = require('../models/mensaje');
 
-const obtenerChat = async( req, res ) => {
+/**
+ * Obtiene el historial de mensajes de un chat
+ * @param {object} req - Objeto de solicitud
+ * @param {object} res - Objeto de respuesta
+ * @returns {object} - Respuesta JSON indicando el éxito y los últimos 30 mensajes del chat
+ */
+const obtenerChat = async (req, res) => {
 
     const miId = req.uid;
     const mensajesDe = req.params.de;
@@ -11,16 +17,13 @@ const obtenerChat = async( req, res ) => {
             { de: mensajesDe, para: miId },
         ]
     })
-    .sort({ createdAt: 'asc' })
-    .limit(30);
-
-
+        .sort({ createdAt: 'asc' })
+        .limit(30);
 
     res.json({
         ok: true,
         mensajes: last30
     });
-
 
 }
 

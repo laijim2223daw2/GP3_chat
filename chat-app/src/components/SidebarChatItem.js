@@ -39,7 +39,7 @@ export const SidebarChatItem = ({ usuario }) => {
                     <img src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/female1-512.png" alt="sunil" />
                 </div>
                 <div className="chat_ib">
-                    <h5> { usuario.nombre } </h5>
+                    <h4> { usuario.nombre } </h4>
                     {
                         ( usuario.online )
                             ? <span className="text-success">Online</span>

@@ -8,13 +8,26 @@ import { SendMessage } from './SendMessage';
 
 export const Messages = () => {
 
-    const { chatState } = useContext( ChatContext );
-    const { auth } = useContext( AuthContext );
+    const { chatState } = useContext(ChatContext);
+    const { auth } = useContext(AuthContext);
+
+    const usuarioActivo = chatState.usuarios.find((u) => u.uid === chatState.chatActivo);
 
     return (
+      <>
+      <div className="chat-header">
+                <h4 className="user-name">{usuarioActivo ? usuarioActivo.nombre : 'Selecciona un chat'}</h4>
+                {usuarioActivo && (
+                <div>
+                    <span className={`user-status ${usuarioActivo.online ? 'online' : 'offline'}`}>
+                    {usuarioActivo.online ? 'Online' : 'Offline'}
+                    </span>
+                </div>
+                )}
+            </div>
         <div className="mesgs">
+            
 
-            {/* <!-- Historia inicio --> */}
             <div 
                 id="mensajes"
                 className="msg_history"
@@ -28,13 +41,11 @@ export const Messages = () => {
                     ))
                 }
 
-                
-
             </div>
-            {/* <!-- Historia Fin --> */}
 
            <SendMessage />
 
         </div>
+        </>
     )
 }

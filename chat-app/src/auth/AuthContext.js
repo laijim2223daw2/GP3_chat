@@ -4,126 +4,126 @@ import { fetchConToken, fetchSinToken } from '../helpers/fetch';
 export const AuthContext = createContext();
 
 const initialState = {
-    uid: null,
-    checking: true,
-    logged: false,
-    name: null,
-    email: null,
+  uid: null,
+  checking: true,
+  logged: false,
+  name: null,
+  email: null,
 };
 
-
 export const AuthProvider = ({ children }) => {
+  const [auth, setAuth] = useState(initialState);
 
-    const [ auth, setAuth ] = useState(initialState)
+  const login = async (email, password) => {
+    const resp = await fetchSinToken('login', { email, password }, 'POST');
 
-    const login = async( email, password ) => {
+    if (resp.ok) {
+      localStorage.setItem('token', resp.token);
+      const { usuario } = resp;
 
-        const resp = await fetchSinToken('login', { email, password }, 'POST');
-
-        if ( resp.ok ) {
-            localStorage.setItem('token', resp.token );
-            const { usuario } = resp;
-
-            setAuth({
-                uid: usuario.uid,
-                checking: false,
-                logged: true,
-                name: usuario.nombre,
-                email: usuario.email,
-            });
-
-        }
-
-        return resp.ok;
+      setAuth({
+        uid: usuario.uid,
+        checking: false,
+        logged: true,
+        name: usuario.nombre,
+        email: usuario.email,
+      });
 
     }
 
-    const register = async(nombre, email, password) => {
+    return resp.ok;
+  };
 
-        const resp = await fetchSinToken('login/new', { nombre, email, password }, 'POST');
-        
-        if ( resp.ok ) {
-            localStorage.setItem('token', resp.token );
-            const { usuario } = resp;
+  const register = async (nombre, email, password) => {
+    const resp = await fetchSinToken('login/new', { nombre, email, password }, 'POST');
+    
+    if (resp.ok) {
+      localStorage.setItem('token', resp.token);
+      const { usuario } = resp;
 
-            setAuth({
-                uid: usuario.uid,
-                checking: false,
-                logged: true,
-                name: usuario.nombre,
-                email: usuario.email,
-            });
+      setAuth({
+        uid: usuario.uid,
+        checking: false,
+        logged: true,
+        name: usuario.nombre,
+        email: usuario.email,
+      });
 
-            return true;
-        }
-
-        return resp.msg;
-
+      return true;
     }
 
-    const verificaToken = useCallback( async() => {
+    return resp.msg;
+  };
 
-        const token = localStorage.getItem('token');
-        // Si token no existe
-        if ( !token ) {
-            setAuth({
-                uid: null,
-                checking: false,
-                logged: false,
-                name: null,
-                email: null,
-            })
+  const verificaToken = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    // Si token no existe
+    if (!token) {
+      setAuth({
+        uid: null,
+        checking: false,
+        logged: false,
+        name: null,
+        email: null,
+      });
 
-            return false;
-        }
-
-        const resp = await fetchConToken('login/renew');
-        if ( resp.ok ) {
-            localStorage.setItem('token', resp.token );
-            const { usuario } = resp;
-
-            setAuth({
-                uid: usuario.uid,
-                checking: false,
-                logged: true,
-                name: usuario.nombre,
-                email: usuario.email,
-            });
-
-            return true;
-        } else {
-            setAuth({
-                uid: null,
-                checking: false,
-                logged: false,
-                name: null,
-                email: null,
-            });
-
-            return false;
-        }
-
-    }, [])
-
-    const logout = () => {
-        localStorage.removeItem('token');
-        setAuth({
-            checking: false,
-            logged: false,
-        });
+      return false;
     }
 
+    const resp = await fetchConToken('login/renew');
+    if (resp.ok) {
+      localStorage.setItem('token', resp.token);
+      const { usuario } = resp;
 
-    return (
-        <AuthContext.Provider value={{
-            auth,
-            login,
-            register,
-            verificaToken,
-            logout,
-        }}>
-            { children }
-        </AuthContext.Provider>
-    )
-}
+      setAuth({
+        uid: usuario.uid,
+        checking: false,
+        logged: true,
+        name: usuario.nombre,
+        email: usuario.email,
+      });
 
+      return true;
+    } else {
+      setAuth({
+        uid: null,
+        checking: false,
+        logged: false,
+        name: null,
+        email: null,
+      });
+
+      return false;
+    }
+  }, []);
+
+  const logout = async () => {
+    try {
+      // Obtiene el ID del usuario autenticado
+      const uid = auth.uid;
+
+      // Actualiza el campo lastOnline con la fecha actual
+      await fetchConToken(`logout/${uid}`, {}, 'POST');
+    } catch (error) {
+      console.error(error);
+    } finally {
+      localStorage.removeItem('token');
+      setAuth({
+        checking: false,
+        logged: false,
+      });
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{
+      auth,
+      login,
+      register,
+      verificaToken,
+      logout,
+    }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

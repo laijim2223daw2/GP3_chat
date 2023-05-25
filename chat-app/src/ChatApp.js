@@ -8,7 +8,9 @@ import moment from 'moment';
 import 'moment/locale/es';
 moment.locale('es');
 
-
+/**
+ * Componente principal de la aplicación de chat
+ */
 export const ChatApp = () => {
     return (
         <ChatProvider>
